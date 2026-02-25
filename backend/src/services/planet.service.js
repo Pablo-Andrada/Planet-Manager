@@ -1,89 +1,99 @@
-// implementamos el módulo fs para trabajar con archivos
-import fs from "fs";
-//importamos el path para construir rutas seguras del sistema
-import path from "path";
-//Construimos la ruta absoluta al archivo planets.json
-const filePath = path.join(__dirname, "../data/planets.json");
+// src/services/planets.service.js
+// Servicio asíncrono para leer/escribir src/data/planets.json usando fs.promises
+// Ventaja: no bloquea el event loop y es consistente con llamadas a DB reales.
 
-// ------------------------------
-// FUNCIÓN PARA LEER EL ARCHIVO
-// ------------------------------
-const readPlanetsFile = () => {
-    //Leemos el archivo como texto
-    const data = fs.readFileSync(filePath, "utf-8");
+const fs = require('fs').promises; // usamos la API de promesas
+const path = require('path');
 
-    //Convertimos el texto JSON a objeto JavaScript
-    return JSON.parse(data);
-}
+const filePath = path.join(__dirname, '../data/planets.json');
 
-// ------------------------------
-// FUNCIÓN PARA ESCRIBIR EN EL ARCHIVO
-// ------------------------------
-const writePlanetsFile = (planets) => {
-  // Convertimos el array a JSON formateado
+/**
+ * readPlanetsFile
+ * Lee el archivo planets.json de forma asíncrona y parsea JSON.
+ * Si el archivo no existe o está vacío, devuelve un array vacío.
+ */
+const readPlanetsFile = async () => {
+  try {
+    const txt = await fs.readFile(filePath, 'utf8'); // asíncrono: no bloquea
+    // si el archivo está vacío devolvemos []
+    if (!txt) return [];
+    return JSON.parse(txt);
+  } catch (err) {
+    // Si el error es ENOENT (archivo no existe) devolvemos []
+    if (err.code === 'ENOENT') return [];
+    // re-lanzamos otros errores para que el caller los maneje
+    throw err;
+  }
+};
+
+/**
+ * writePlanetsFile
+ * Sobreescribe el archivo con JSON formateado (async)
+ * Notar: writeFile sobreescribe por defecto.
+ */
+const writePlanetsFile = async (planets) => {
   const data = JSON.stringify(planets, null, 2);
-
-  // Sobreescribimos el archivo
-  fs.writeFileSync(filePath, data);
-};
-// ------------------------------
-// OBTENER TODOS LOS PLANETAS
-// ------------------------------
-const getAllPlanets = () => {
-    return readPlanetsFile();
-};
-// ------------------------------
-// CREAR PLANETA
-// ------------------------------
-const createPlanet = (planetData) => {
-    const planets = readPlanetsFile();
-
-    const newPlanet = {
-        id: Date.now(), // ID simple basado en timestamp
-        ...planetData
-    };
-
-    planets.push(newPlanet);
-    writePlanetsFile(planets);
-
-    return newPlanet;
+  await fs.writeFile(filePath, data, 'utf8'); // escritura asíncrona
 };
 
-// ------------------------------
-// ACTUALIZAR PLANETA
-// ------------------------------
-const updatePlanet = (id,updatedData) => {
-    const planets = readPlanetsFile();
 
-    planets.findIndex(p => p.id === Number(id));
-    
-    if (index === -1) return null;
+// ----------------------
+// Operaciones del servicio
+// ----------------------
 
-    planets[index] = {
-        ...planets[index],
-        ...updatedData
-    };
-    writePlanetsFile(planets);
-    return planets[index];
+const getAllPlanets = async () => {
+  const planets = await readPlanetsFile();
+  return planets;
 };
-// ------------------------------
-// ELIMINAR PLANETA
-// ------------------------------
-const deletePlanet = (id) => {
-    const planets = readPlanetsFile();
 
-    const filtered = planets.filter(p => p.id !== Number(id));
+const createPlanet = async (planetData) => {
+  const planets = await readPlanetsFile();
 
-    if (filtered.length === planets.length) return false;
+  // ID simple basado en timestamp (suficiente para demo)
+  const newPlanet = {
+    id: Date.now(),
+    ...planetData
+  };
 
-    writePlanetsFile(filtered);
+  planets.push(newPlanet);
 
-    return true;
+  await writePlanetsFile(planets);
 
+  return newPlanet;
 };
+
+const updatePlanet = async (id, updatedData) => {
+  const planets = await readPlanetsFile();
+
+  const index = planets.findIndex(p => p.id === Number(id));
+  if (index === -1) return null;
+
+  planets[index] = {
+    ...planets[index],
+    ...updatedData
+  };
+
+  await writePlanetsFile(planets);
+
+  return planets[index];
+};
+
+const deletePlanet = async (id) => {
+  const planets = await readPlanetsFile();
+
+  const filtered = planets.filter(p => p.id !== Number(id));
+
+  // Si no cambió la longitud, no se encontró
+  if (filtered.length === planets.length) return false;
+
+  await writePlanetsFile(filtered);
+
+  return true;
+};
+
 module.exports = {
-    getAllPlanets,
-    createPlanet,
-    updatePlanet,
-    deletePlanet
-}
+  getAllPlanets,
+  createPlanet,
+  updatePlanet,
+  deletePlanet
+};
