@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": 1772044381205,
+    "name": "Earth",
+    "diameter": 12742,
+    "hasLife": true
+  },
+  {
+    "id": 1772044412539,
+    "name": "Marth",
+    "diameter": 10042,
+    "hasLife": true
+  }
+]

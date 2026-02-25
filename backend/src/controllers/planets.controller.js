@@ -7,7 +7,7 @@ const {
   createPlanet,
   updatePlanet,
   deletePlanet
-} = require('../services/planets.service');
+} = require('../services/planet.service');
 
 exports.getPlanets = async (req, res) => {
   try {
