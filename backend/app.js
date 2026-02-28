@@ -6,7 +6,7 @@ const app = express();
 //Middleware para poder leer JSON del body
 
 app.use(express.json());
-app.use(morgan())
+app.use(morgan('dev'))
 //Ruta principal
 app.use("/planets", planetsRouter);
 
