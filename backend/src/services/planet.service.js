@@ -41,6 +41,7 @@ const writePlanetsFile = async (planets) => {
 // Operaciones del servicio
 // ----------------------
 
+//GETALLPLANETS
 // Devuelve todos los planetas guardados en el archivo JSON.
 // -> [] si no hay archivo o está vacío (ese comportamiento lo maneja readPlanetsFile).
 const getAllPlanets = async () => {
@@ -48,38 +49,58 @@ const getAllPlanets = async () => {
   const planets = await readPlanetsFile();
   return planets; // retorno directo; nunca modifica el array original aquí.
 };
+//---------------------------------------------------------------------------------------
 
+// CREATEPLANET
+// Crea un nuevo planeta con los datos recibidos y lo persiste en el JSON.
+// Devuelve el planeta recién creado (incluyendo id).
 const createPlanet = async (planetData) => {
+  // Leemos la lista actual
   const planets = await readPlanetsFile();
 
-  // ID simple basado en timestamp (suficiente para demo)
+  // ID simple basado en timestamp (suficiente para demo).
+  // Atención: Date.now() puede colisionar si se crean varios en el mismo ms.
   const newPlanet = {
-    id: Date.now(),
-    ...planetData
+    id: Date.now(),    // recomendación: usar UUID para evitar colisiones en producción
+    ...planetData      // merge de los campos proporcionados (name, mass, etc.)
   };
 
+  // Añadimos al array en memoria
   planets.push(newPlanet);
 
+  // Persistimos el array actualizado al archivo
   await writePlanetsFile(planets);
 
+  // Devolvemos el recurso creado
   return newPlanet;
 };
+//----------------------------------------------------------------------------------------
+// UPDATEPLANET
 
+// Actualiza el planeta con id dado usando updatedData.
+// Devuelve el planeta actualizado, o null si no existe.
 const updatePlanet = async (id, updatedData) => {
+  // Leemos la lista actual
   const planets = await readPlanetsFile();
 
+  // Buscamos el índice del planeta cuyo id coincide.
+  // Number(id) convierte 'id' si viene como string; asegúrate del tipo que usás para ids.
   const index = planets.findIndex(p => p.id === Number(id));
-  if (index === -1) return null;
+  if (index === -1) return null; // no encontrado
 
+  // Merge: conserva propiedades previas y sobrescribe con updatedData
   planets[index] = {
     ...planets[index],
     ...updatedData
   };
 
+  // Guardamos los cambios en disco
   await writePlanetsFile(planets);
 
+  // Devolvemos el objeto actualizado
   return planets[index];
 };
+//-----------------------------------------------------------------------------------------
 
 const deletePlanet = async (id) => {
   const planets = await readPlanetsFile();
