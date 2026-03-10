@@ -41,9 +41,12 @@ const writePlanetsFile = async (planets) => {
 // Operaciones del servicio
 // ----------------------
 
+// Devuelve todos los planetas guardados en el archivo JSON.
+// -> [] si no hay archivo o está vacío (ese comportamiento lo maneja readPlanetsFile).
 const getAllPlanets = async () => {
+  // readPlanetsFile() es la utilidad que lee el JSON y devuelve un array de planets (o [] por defecto).
   const planets = await readPlanetsFile();
-  return planets;
+  return planets; // retorno directo; nunca modifica el array original aquí.
 };
 
 const createPlanet = async (planetData) => {
