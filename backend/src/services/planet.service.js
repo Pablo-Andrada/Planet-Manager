@@ -102,14 +102,18 @@ const updatePlanet = async (id, updatedData) => {
 };
 //-----------------------------------------------------------------------------------------
 
+// Elimina el planeta por id. Devuelve true si se eliminó, false si no se encontró.
 const deletePlanet = async (id) => {
+  // Leemos la lista actual
   const planets = await readPlanetsFile();
 
+  // Filtramos todos los planetas que NO tengan el id indicado (conversión a Number)
   const filtered = planets.filter(p => p.id !== Number(id));
 
-  // Si no cambió la longitud, no se encontró
+  // Si no cambió la longitud, significa que no se encontró el id
   if (filtered.length === planets.length) return false;
 
+  // Guardamos el array filtrado (sin el planeta eliminado)
   await writePlanetsFile(filtered);
 
   return true;
