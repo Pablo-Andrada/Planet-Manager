@@ -101,7 +101,7 @@ const updatePlanet = async (id, updatedData) => {
   return planets[index];
 };
 //-----------------------------------------------------------------------------------------
-
+    // DELETE PLANET
 // Elimina el planeta por id. Devuelve true si se eliminó, false si no se encontró.
 const deletePlanet = async (id) => {
   // Leemos la lista actual
