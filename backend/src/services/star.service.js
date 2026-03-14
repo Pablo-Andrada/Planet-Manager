@@ -61,7 +61,7 @@ const updateStar = async (id, updatedData) => {
     return stars[index];
 }
 
-const deleteStar = async(id) => {
+const deleteStar = async (id) => {
     const stars = await readStarsFile();
 
     const filtered = stars.filter(s => s.id !== Number(id));
@@ -71,4 +71,11 @@ const deleteStar = async(id) => {
     await writeStarsFile(filtered);
 
     return true;
-}
+};
+
+module.exports = {
+    getAllStars,
+    createStar,
+    updateStar,
+    deleteStar
+};
