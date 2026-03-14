@@ -31,3 +31,33 @@ exports.createStarController = async (req,res) => {
     return res.status(500).json({ error: 'Server error' });
     }
 }
+exports.updateStarController = async (req, res) => {
+    try {
+        const id = req.params;
+        const updated = await updateStar(id, req.body);
+        if (!updated) {
+            return res.status(404).json({ error: 'Star not found' });
+        }
+
+        return res.status(200).json(updated);
+    } catch (error) {
+        console.error(`PUT /stars/${req.params.id} error:`, err);
+        return res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.deleteStarController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await deleteStar(id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: 'Star not found' });
+    }
+
+    return res.status(200).json({ message: 'Star deleted' });
+  } catch (err) {
+    console.error(`DELETE /stars/${req.params.id} error:`, err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
