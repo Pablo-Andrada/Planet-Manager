@@ -24,3 +24,55 @@ const writeAsteroidsFile = async (asteroids) => {
 
 //-----------------------------------SERVICES--------------------------------------------
 
+const getAllAsteroids = async ()=>{
+    const asteroids = await readAsteroidsFile();
+    return asteroids;
+};
+
+const createAsteroid = async (asteroidData) => {
+    const asteroids = await readAsteroidsFile();
+
+    const newAsteroid = {
+        id: Date.now(),
+        ...asteroidData
+    };
+
+    asteroids.push(newAsteroid);
+
+    await writeAsteroidsFile(newAsteroid);
+
+    return newAsteroid;
+};
+
+const updateAsteroid = async (id, updatedData) => {
+    const asteroids = await readAsteroidsFile();
+
+    const index = asteroids.findIndex(a => a.id === Number(id));
+
+    if (index === -1) return null;
+
+    asteroids[index] = {
+        ...asteroids[index],
+        ...updatedData
+    }
+
+    await writeAsteroidsFile(asteroids);
+    return asteroids[index];
+}
+
+const deleteAsteroid = async (id) => {
+    const asteroids = await readAsteroidsFile();
+
+    const filtered = asteroids.filter(a => a.id !== Number(id));
+    if (asteroids.length === filtered.length) return false;
+
+    await writeAsteroidsFile(filtered);
+    return true;
+}
+
+module.exports = {
+    getAllAsteroids,
+    createAsteroid,
+    updateAsteroid,
+    deleteAsteroid
+}
