@@ -1,31 +1,29 @@
 const fs = require("fs").promises;
 const path = require("path");
-
-const filePath = path.join(__dirname, "../data/asteroids.json");
-
+const filePath = path.join(__dirname, "../data/asteroids.js");
 
 //----------------------------FUNCIONES FS-------------------------------------------------
 const readAsteroidsFile = async () => {
     try {
         const txt = await fs.readFile(filePath, "utf-8");
-        //si no hay nada en txt
         if (!txt) return [];
         return JSON.parse(txt);
     } catch (error) {
-        if (error.code = "ENOENTE") return [];
+        if (error.code = "ENOENT") return [];
         return error;
     }
-};
+}
 
 const writeAsteroidsFile = async (asteroids) => {
     const data = JSON.stringify(asteroids, null, 2);
-    await fs.writeFile(filePath, data, "utf-8");
+    await fs.writeFile(filePath,data,"utf-8")
 };
 
 //-----------------------------------SERVICES--------------------------------------------
 
 const getAllAsteroids = async ()=>{
     const asteroids = await readAsteroidsFile();
+
     return asteroids;
 };
 
@@ -35,11 +33,11 @@ const createAsteroid = async (asteroidData) => {
     const newAsteroid = {
         id: Date.now(),
         ...asteroidData
-    };
+    }
 
     asteroids.push(newAsteroid);
 
-    await writeAsteroidsFile(newAsteroid);
+    await writeAsteroidsFile(asteroids);
 
     return newAsteroid;
 };
