@@ -1,6 +1,7 @@
 const express = require("express");
 const planetsRouter = require("./src/routes/planets.routes");
 const starsRouter = require("./src/routes/stars.routes");
+const asteroidsRouter = require("./src/routes/asteroids.routes");
 const morgan = require("morgan");
 const app = express();
 
@@ -10,7 +11,8 @@ app.use(express.json());
 app.use(morgan('dev'));
 //Ruta principal
 app.use("/planets", planetsRouter);
-app.use("/stars",starsRouter)
+app.use("/stars", starsRouter);
+app.use("/asteroids", asteroidsRouter);
 
 module.exports = app;
 

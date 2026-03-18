@@ -3,7 +3,7 @@ const {    getAllAsteroids,
     updateAsteroid,
     deleteAsteroid } = require("../services/asteroid.service");
     
-exports.getStarsController = async (req,res) => {
+exports.getAsteroidsController = async (req,res) => {
     try {        
         const asteroids = await getAllAsteroids();
         return res.status(200).json(asteroids);
