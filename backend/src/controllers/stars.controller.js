@@ -16,21 +16,21 @@ exports.getStarsController = async (req, res) => {
     }
 };
 
-exports.createStarController = async (req,res) => {
+exports.createStarController = async (req, res) => {
     try {
-         const { name, diameter, hasLife } = req.body;
+        const { name, diameter, hasLife } = req.body;
 
-    // Validaciones simples
-    if (!name || diameter === undefined) {
-      return res.status(400).json({ error: 'Name and diameter are required' });
-    }
+        // Validaciones simples
+        if (!name || diameter === undefined) {
+            return res.status(400).json({ error: 'Name and diameter are required' });
+        }
         const newStar = await createStar({ name, diameter, hasLife });
-    return res.status(201).json(newStar);
+        return res.status(201).json(newStar);
     } catch (error) {
         console.error('POST /stars error:', err);
-    return res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error' });
     }
-}
+};
 exports.updateStarController = async (req, res) => {
     try {
         const {id} = req.params;
