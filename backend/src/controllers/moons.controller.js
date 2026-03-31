@@ -56,3 +56,10 @@ const deleteMoonController = async (req,res) => {
         return res.status(500).json({err:"Server error."})
     }
 }
+
+module.exports = {
+    getAllMoonsController,
+    createMoonController,
+    updateMoonController,
+    deleteMoonController
+};
