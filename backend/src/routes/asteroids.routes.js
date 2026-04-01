@@ -5,7 +5,7 @@ const {
     createAsteroidController,
     updateAsteroidController,
     deleteAsteroidController
-} = require("../controllers/stars.controller");
+} = require("../controllers/asteroids.controller");
 
 const router = Router();
 

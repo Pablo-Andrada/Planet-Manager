@@ -1,7 +1,7 @@
 // src/App.jsx
 // Componente principal: carga la lista desde el backend y conecta el formulario.
 import React, { useEffect, useState } from 'react'
-import { fetchPlanets, createPlanet, updatePlanet, deletePlanet } from './api'
+import { fetchPlanets, createPlanet, updatePlanet, deletePlanet } from './api/planets'
 import PlanetForm from './components/PlanetForm'
 import PlanetList from './components/PlanetList'
 
