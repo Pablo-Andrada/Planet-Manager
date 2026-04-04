@@ -4,6 +4,7 @@ const planetsRouter = require("./src/routes/planets.routes");
 const starsRouter = require("./src/routes/stars.routes");
 const asteroidsRouter = require("./src/routes/asteroids.routes");
 const moonsRouter = require("./src/routes/moons.routes");
+const cometsRouter = require("./src/routes/comets.routes");
 //-------------------------------------------------------------------
 const morgan = require("morgan");
 const app = express();
@@ -17,6 +18,8 @@ app.use("/moons", moonsRouter);
 app.use("/planets", planetsRouter);
 app.use("/stars", starsRouter);
 app.use("/asteroids", asteroidsRouter);
+app.use("/comets", cometsRouter);
+
 
 module.exports = app;
 
